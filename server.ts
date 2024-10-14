@@ -8,6 +8,9 @@ async function handler(req: Request): Promise<Response> {
 	if (req.method === "POST" && path === "/upload") {
 		const data = await req.formData();
 		const file = data.get("file") as File;
+		if (!file) {
+			return new Response("No file attached", { status: 400 });
+		}
 		const upload = await pinata.upload.file(file);
 		return Response.json(upload);
 	}
